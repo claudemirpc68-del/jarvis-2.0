@@ -13,3 +13,5 @@ aiofiles
 edge-tts
 httpx
 gradio-client
+pandas
+gspread
