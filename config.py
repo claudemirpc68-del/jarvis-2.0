@@ -103,7 +103,7 @@ class Config:
         raise ValueError(f"Variável de ambiente {key} não encontrada")
     
     def load_config(self) -> None:
-        """Carregar configurações do arquivo .env"""
+        """Carregar configurações do arquivo .env (sem sobrescrever variáveis de ambiente existentes)"""
         env_path = Path(self.env_file)
         if env_path.exists():
             with open(env_path, 'r', encoding='utf-8') as f:
@@ -111,7 +111,10 @@ class Config:
                     line = line.strip()
                     if line and not line.startswith('#'):
                         key, value = line.split('=', 1)
-                        os.environ[key.strip()] = value.strip()
+                        k = key.strip()
+                        v = value.strip()
+                        if k not in os.environ:
+                            os.environ[k] = v
     
     def validate_config(self) -> bool:
         """Validar configurações"""
